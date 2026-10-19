@@ -1429,7 +1429,7 @@ AKSI.formPetugas = (el) => {
     '<div class="form-text">Wajib untuk Pimpinan.</div></div>' +
     '<div class="col-md-6 d-flex flex-column justify-content-end gap-2">' +
     '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="pBko" ' + (v.bko === 'Ya' ? 'checked' : '') + '><label class="form-check-label" for="pBko">Status BKO</label></div>' +
-    '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="pBoleh" ' + (v.boleh === 'Ya' ? 'checked' : '') + '><label class="form-check-label" for="pBoleh">Boleh mengajukan izin bawa HP (pejabat)</label></div>' +
+    '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="pBoleh" ' + (v.boleh === 'Ya' ? 'checked' : '') + '><label class="form-check-label" for="pBoleh">Boleh mengajukan izin bawa HP <span class="text-secondary-x small">(berlaku bila izin tidak dibuka untuk semua di Pengaturan)</span></label></div>' +
     '</div></div></form>';
   bukaModal({
     judul: p ? '<i class="bi bi-pencil-square"></i> Ubah Data Petugas' : '<i class="bi bi-person-plus"></i> Tambah Petugas',
@@ -1777,7 +1777,7 @@ function renderIzin(c, d) {
       (d.hpSaya.length ? '' : '<div class="notice"><i class="bi bi-info-circle"></i><div class="small">Anda belum memiliki HP terdaftar. Hubungi Admin Kamtib untuk pendaftaran.</div></div>') +
       '<div class="mb-3"><label class="form-label" for="izHp">HP yang dibawa *</label><select class="form-select" id="izHp">' +
       opsi(d.hpSaya.map(h => [h.id, h.id + ' — ' + h.merek + ' (IMEI ****' + h.imei4 + ')']), d.hpSaya.length === 1 ? d.hpSaya[0].id : '', '— Pilih HP —') + '</select></div>' +
-      '<div class="mb-3"><label class="form-label" for="izAlasan">Keperluan dinas *</label><textarea class="form-control" id="izAlasan" rows="3" maxlength="500" placeholder="Contoh: Sidang TPP online, input rekam medis SDP, inspeksi khusus blok…" data-inp="hitungAlasan"></textarea>' +
+      '<div class="mb-3"><label class="form-label" for="izAlasan">Keperluan *</label><textarea class="form-control" id="izAlasan" rows="3" maxlength="500" placeholder="Contoh: Sidang TPP online, input data SDP, dokumentasi kegiatan, komunikasi darurat keluarga…" data-inp="hitungAlasan"></textarea>' +
       '<div class="form-text d-flex justify-content-between"><span>Minimal 10 karakter, jelaskan keperluannya.</span><span id="izHitung">0/500</span></div></div>' +
       '<div class="row g-2 mb-2"><div class="col-6"><label class="form-label" for="izMulai">Mulai (WIT) *</label><input type="datetime-local" class="form-control" id="izMulai" value="' + mulai + '" data-chg="durasiIzin"></div>' +
       '<div class="col-6"><label class="form-label" for="izSampai">Selesai (WIT) *</label><input type="datetime-local" class="form-control" id="izSampai" value="' + sampai + '" data-chg="durasiIzin"></div></div>' +
@@ -1793,7 +1793,7 @@ function renderIzin(c, d) {
       (menunggu.length ? menunggu.map(kartuIzinPending).join('') : kosong('bi-check2-all', 'Tidak ada pengajuan yang menunggu.')) + '</div></section>';
   }
   const tab = AppState.tabIzin;
-  c.innerHTML = kepala('Izin Membawa HP', 'Pejabat yang berhak dapat membawa HP ke area dalam dengan izin digital yang disetujui Pimpinan / P2U.',
+  c.innerHTML = kepala('Izin Membawa HP', 'Petugas, magang, P2U, dan pejabat yang ada keperluan dapat membawa HP ke area dalam dengan izin digital yang disetujui Pimpinan / P2U.',
     '<button type="button" class="btn btn-soft btn-sm" data-act="muatUlang"><i class="bi bi-arrow-clockwise"></i> Muat ulang</button>') +
     '<div class="row g-3">' + (kiri ? '<div class="col-lg-5">' + kiri + '</div>' : '') + '<div class="' + (kiri ? 'col-lg-7' : 'col-12') + '">' + pending +
     '<section class="cardx"><div class="cardx-head"><div class="nav-tabs-x" role="tablist">' +
@@ -2206,7 +2206,8 @@ const FORM_CFG = [
   { grup: 'Jam Shift & Aturan Batas Ambil (WIT)', ikon: 'bi-clock', field: [
     ['jamShiftPagi', 'Pergantian ke Shift Pagi', 'time'], ['jamShiftSiang', 'Pergantian ke Shift Siang', 'time'], ['jamShiftMalam', 'Pergantian ke Shift Malam', 'time'],
     ['jamPulangKantor', 'Jam pulang kantor (Non-Regu & Magang)', 'time'], ['menitPeringatan', 'Peringatan pertama (menit sebelum batas)', 'number'],
-    ['toleransiDatangMenit', 'Toleransi datang lebih awal (menit)', 'number'], ['maksJamIzin', 'Durasi maksimal izin bawa HP (jam)', 'number']] },
+    ['toleransiDatangMenit', 'Toleransi datang lebih awal (menit)', 'number'], ['maksJamIzin', 'Durasi maksimal izin bawa HP (jam)', 'number'],
+    ['izinSemuaPetugas', 'Izin bawa HP terbuka untuk semua (Petugas, Magang, P2U)', 'select']] },
   { grup: 'Penerima Peringatan Tambahan', ikon: 'bi-bell', field: [
     ['waPosP2U', 'No. WA HP dinas Pos P2U', 'tel'], ['emailTambahan', 'Email penerima tambahan (pisahkan koma)', 'text']] },
   { grup: 'Identitas Instansi & Laporan', ikon: 'bi-building', field: [
