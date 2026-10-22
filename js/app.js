@@ -1146,6 +1146,14 @@ function kartuHp(it, manual) {
     info += '<div class="izin-banner"><b><i class="bi bi-patch-check-fill" aria-hidden="true"></i> BERIZIN — BOLEH DIBAWA</b> s/d ' + fmt(iz.sampai, 'tglJam') + ' WIT<br>' +
       '<span class="small">Keperluan: ' + esc(iz.alasan) + ' • Disetujui ' + esc(iz.peranPenyetuju) + ' • No. ' + esc(iz.id) + '</span></div>';
   }
+  if (!iz && it.aktif && it.status === 'DI_LUAR') {
+    const zl = it.izinLain;
+    let teks;
+    if (zl && zl.status === 'MENUNGGU') teks = 'Ada pengajuan izin <b>' + esc(zl.id) + '</b> yang <b>masih menunggu persetujuan</b>. Setujui dulu di menu Izin agar tombol <i>Catat Masuk Berizin</i> muncul.';
+    else if (zl) teks = 'Izin <b>' + esc(zl.id) + '</b> sudah disetujui, tetapi <b>baru berlaku mulai ' + fmt(zl.mulai, 'tglJam') + ' WIT</b>. Sebelum jam itu, HP hanya bisa dititipkan.';
+    else teks = 'HP ini <b>belum punya izin bawa HP yang aktif</b>, jadi hanya bisa dititipkan. Bila ada keperluan, pemilik dapat mengajukan izin di menu <b>Izin</b>.';
+    info += '<div class="notice mt-2 mb-0 py-2"><i class="bi bi-info-circle" aria-hidden="true"></i><div class="small">' + teks + '</div></div>';
+  }
   if (manual) info += '<div class="notice mt-2 mb-0 py-2"><i class="bi bi-hand-index-thumb" aria-hidden="true"></i><div class="small">Hasil input manual — <b>wajib cocokkan HP fisik</b> (merek, warna, IMEI) dengan data ini.</div></div>';
 
   let aksi = '';
@@ -2224,7 +2232,13 @@ HALAMAN.pengaturan = async (c, o, seq) => {
 };
 function renderPengaturan(c, d) {
   {
+  // Tahan banting: respons lama/tidak lengkap (backend belum diperbarui, cache lama) tidak boleh merusak halaman
+  const lengkap = !!(d && d.nilai && Array.isArray(d.triggers));
+  d = Object.assign({ nilai: {}, keterangan: {}, triggers: [], logos: {}, kuotaEmail: '-', spreadsheetUrl: '#', folderUrl: '#', fonnteTerisi: false }, d || {});
+  ['nilai', 'keterangan', 'logos'].forEach(k => { if (!d[k] || typeof d[k] !== 'object') d[k] = {}; });
+  if (!Array.isArray(d.triggers)) d.triggers = [];
   AppState.cache.pengaturan = d;
+  if (!lengkap) setTimeout(() => toast('Backend perlu diperbarui', 'Data pengaturan dari server tidak lengkap. Di Apps Script: Terapkan → Kelola deployment → pensil → Versi baru → Terapkan, lalu muat ulang halaman ini.', 'warning'), 50);
   const fieldHtml = (f) => {
     const k = f[0], v = d.nilai[k] || '', ket = d.keterangan[k] || '';
     let input;
