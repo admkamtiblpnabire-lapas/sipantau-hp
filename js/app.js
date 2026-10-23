@@ -2234,7 +2234,7 @@ const FORM_CFG = [
     ['toleransiDatangMenit', 'Toleransi datang lebih awal (menit)', 'number'], ['maksJamIzin', 'Durasi maksimal izin bawa HP (jam)', 'number'],
     ['izinSemuaPetugas', 'Izin bawa HP terbuka untuk semua (Petugas, Magang, P2U)', 'select']] },
   { grup: 'Penerima Peringatan Tambahan', ikon: 'bi-bell', field: [
-    ['waPosP2U', 'No. WA HP dinas Pos P2U', 'tel'], ['emailTambahan', 'Email penerima tambahan (pisahkan koma)', 'text']] },
+    ['waPosP2U', 'No. WA Patwal / Pos P2U (boleh lebih dari satu, pisahkan koma)', 'text'], ['emailTambahan', 'Email penerima tambahan (pisahkan koma)', 'text']] },
   { grup: 'Identitas Instansi & Laporan', ikon: 'bi-building', field: [
     ['appName', 'Nama aplikasi', 'text'], ['instansi', 'Nama instansi', 'text'], ['alamatInstansi', 'Alamat (kop laporan)', 'text'],
     ['appUrl', 'URL Web App / halaman Blogger (dipakai di pesan WA)', 'url'], ['laporanHarianOtomatis', 'Kirim laporan harian PDF otomatis 08.15 WIT', 'select'],
@@ -2262,7 +2262,7 @@ function renderPengaturan(c, d) {
     let input;
     if (f[2] === 'select') input = '<select class="form-select" id="cfg_' + k + '">' + opsi(['Ya', 'Tidak'], v) + '</select>';
     else input = '<input class="form-control' + (f[2] === 'tel' ? ' mono' : '') + '" id="cfg_' + k + '" type="' + (f[2] === 'tel' ? 'text' : f[2]) + '" value="' + esc(v) + '"' +
-      (f[2] === 'number' ? ' min="1" inputmode="numeric"' : '') + (f[2] === 'tel' ? ' inputmode="tel" placeholder="6281234567890"' : '') + '>';
+      (f[2] === 'number' ? ' min="1" inputmode="numeric"' : '') + (f[2] === 'tel' ? ' inputmode="tel" placeholder="6281234567890"' : '') + (k === 'waPosP2U' ? ' placeholder="6281234567890, 6282198765432" autocomplete="off"' : '') + '>';
     return '<div class="col-md-6"><label class="form-label" for="cfg_' + k + '">' + esc(f[1]) + '</label>' + input + (ket && ket !== f[1] ? '<div class="form-text">' + esc(ket) + '</div>' : '') + '</div>';
   };
   const trig = TRIGGER_WAJIB.map(t => '<li class="d-flex justify-content-between align-items-center py-1"><span>' + t[1] + '</span>' + (d.triggers.indexOf(t[0]) >= 0 ? '<span class="bs bs-green">Aktif</span>' : '<span class="bs bs-red">Belum</span>') + '</li>').join('');
