@@ -307,14 +307,31 @@ const SEGAR = { getDashboard: 20000, getHpSaya: 30000, getIzin: 20000, getPetuga
  * SWR: tampilkan cache seketika → segarkan di latar → render ulang HANYA bila data berubah.
  * render(data, dariCache) maksimal dipanggil 2×. Gagal jaringan + ada cache = tetap tampil (dengan pemberitahuan).
  */
+/** Bentuk data minimal per fungsi. Cache/respons yang tidak cocok (versi lama, terpotong) dibuang, tidak dirender. */
+const BENTUK = {
+  getHpList: d => d && Array.isArray(d.hp) && Array.isArray(d.petugas),
+  getPengaturan: d => d && d.nilai && typeof d.nilai === 'object' && Array.isArray(d.triggers),
+  getPetugasList: d => Array.isArray(d),
+  getIzin: d => d && Array.isArray(d.daftar) && Array.isArray(d.hpSaya),
+  getHpSaya: d => d && d.profil && Array.isArray(d.hp),
+  getDashboard: d => d && d.kpi && Array.isArray(d.terbuka)
+};
+function bentukOk(fn, d) { const f = BENTUK[fn]; try { return !f || !!f(d); } catch (e) { return false; } }
+
 async function swr(kunci, fn, args, render, opt) {
   opt = opt || {};
-  const c = ambilCache(kunci);
+  let c = ambilCache(kunci);
+  if (c && !bentukOk(fn, c.data)) { Store.del(kunciUser(kunci)); c = null; }
   if (c) render(c.data, true);
   const segar = opt.segar !== undefined ? opt.segar : (SEGAR[fn] || 30000);
   if (c && !opt.paksa && Date.now() - c.t < segar && c.t > (AppState.tulisTerakhir || 0)) return c.data;
   try {
-    const r = await apiOpsi({ diam: !!c }, fn, ...(args || []));
+    let r = await apiOpsi({ diam: !!c }, fn, ...(args || []));
+    if (!bentukOk(fn, r.data)) {
+      await jeda(800);
+      r = await apiOpsi({ diam: true }, fn, ...(args || []));                  // coba sekali lagi
+      if (!bentukOk(fn, r.data)) throw buatGalat('Data dari server belum lengkap. Tekan Muat ulang. Bila berulang, pastikan backend sudah di-deploy sebagai Versi baru.', 'JARINGAN');
+    }
     const h = hashStr(JSON.stringify(r.data));
     Store.set(kunciUser(kunci), { t: Date.now(), h: h, data: r.data });
     if (!c || c.h !== h) render(r.data, false);
@@ -698,7 +715,7 @@ async function prefetchPeran() {
   try {
     const r = await apiOpsi({ diam: true }, 'batch', daftar.map(fn => ({ fn: fn })));
     if (!AppState.user || AppState.user.nip !== u.nip) return;
-    Object.keys(r.data || {}).forEach(fn => { const x = r.data[fn]; if (x && x.success) simpanCache(fn, x.data); });
+    Object.keys(r.data || {}).forEach(fn => { const x = r.data[fn]; if (x && x.success && bentukOk(fn, x.data)) simpanCache(fn, x.data); });
   } catch (e) { /* prefetch tidak kritis */ }
 }
 
