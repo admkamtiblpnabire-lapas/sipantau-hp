@@ -2239,7 +2239,8 @@ const FORM_CFG = [
     ['appName', 'Nama aplikasi', 'text'], ['instansi', 'Nama instansi', 'text'], ['alamatInstansi', 'Alamat (kop laporan)', 'text'],
     ['appUrl', 'URL Web App / halaman Blogger (dipakai di pesan WA)', 'url'], ['laporanHarianOtomatis', 'Kirim laporan harian PDF otomatis 08.15 WIT', 'select'],
     ['namaKaKPLP', 'Nama Ka. KPLP (penanda tangan)', 'text'], ['nipKaKPLP', 'NIP Ka. KPLP', 'text'],
-    ['namaKasiKamtib', 'Nama Kasi Adm. Kamtib (penanda tangan)', 'text'], ['nipKasiKamtib', 'NIP Kasi Adm. Kamtib', 'text']] }
+    ['namaKasiKamtib', 'Nama Kasi Kamtib (penanda tangan)', 'text'], ['nipKasiKamtib', 'NIP Kasi Kamtib', 'text'],
+    ['namaKalapas', 'Nama Kepala Lapas — "Mengetahui" (opsional)', 'text'], ['nipKalapas', 'NIP Kepala Lapas (opsional)', 'text']] }
 ];
 const SLOT_LOGO = [['logoKemenimipas', 'Kementerian Imigrasi & Pemasyarakatan'], ['logoPemasyarakatan', 'Pemasyarakatan'], ['logoLapas', 'Lapas Nabire (LABIRE)']];
 const TRIGGER_WAJIB = [['pekerjaOtomatis', 'Pekerja otomatis tiap 1 menit (antrean WA/email, peringatan 5 menit, sinkron CRM)'], ['kirimLaporanHarianOtomatis', 'Laporan harian 08.15'], ['backupMingguan', 'Backup mingguan (Minggu 23.00)']];
