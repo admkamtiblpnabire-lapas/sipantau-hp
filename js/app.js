@@ -2234,7 +2234,7 @@ const FORM_CFG = [
     ['toleransiDatangMenit', 'Toleransi datang lebih awal (menit)', 'number'], ['maksJamIzin', 'Durasi maksimal izin bawa HP (jam)', 'number'],
     ['izinSemuaPetugas', 'Izin bawa HP terbuka untuk semua (Petugas, Magang, P2U)', 'select']] },
   { grup: 'Penerima Peringatan Tambahan', ikon: 'bi-bell', field: [
-    ['waPosP2U', 'No. WA Patwal / Pos P2U (boleh lebih dari satu, pisahkan koma)', 'text'], ['emailTambahan', 'Email penerima tambahan (pisahkan koma)', 'text']] },
+    ['waPosP2U', 'No. WA Patnal / Pos P2U (boleh lebih dari satu, pisahkan koma)', 'text'], ['emailTambahan', 'Email penerima tambahan (pisahkan koma)', 'text']] },
   { grup: 'Identitas Instansi & Laporan', ikon: 'bi-building', field: [
     ['appName', 'Nama aplikasi', 'text'], ['instansi', 'Nama instansi', 'text'], ['alamatInstansi', 'Alamat (kop laporan)', 'text'],
     ['appUrl', 'URL Web App / halaman Blogger (dipakai di pesan WA)', 'url'], ['laporanHarianOtomatis', 'Kirim laporan harian PDF otomatis 08.15 WIT', 'select'],
